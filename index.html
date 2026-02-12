@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What Should I Make a Website About?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=DM+Mono:wght@400;500&family=Anybody:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #13131f;
+    --border: #2a2a3d;
+    --accent: #ff3d5a;
+    --accent-glow: #ff3d5a66;
+    --yellow: #ffd23f;
+    --cyan: #00e5ff;
+    --green: #39ff14;
+    --text: #e8e8f0;
+    --muted: #6b6b82;
+    --slot-bg: #08080d;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+  }
+
+  /* Noise overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  /* Scanlines */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.08) 2px,
+      rgba(0,0,0,0.08) 4px
+    );
+    pointer-events: none;
+    z-index: 998;
+  }
+
+  .container {
+    max-width: 720px;
+    width: 100%;
+    padding: 2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    padding-top: 3rem;
+  }
+
+  .header h1 {
+    font-family: 'Dela Gothic One', sans-serif;
+    font-size: clamp(2rem, 7vw, 3.8rem);
+    line-height: 1.05;
+    color: var(--text);
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.6rem;
+  }
+
+  .header h1 .highlight {
+    color: var(--accent);
+    position: relative;
+    display: inline-block;
+  }
+
+  .header h1 .highlight::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: -4px;
+    right: -4px;
+    height: 6px;
+    background: var(--accent);
+    border-radius: 3px;
+    opacity: 0.5;
+  }
+
+  .subtitle {
+    font-family: 'DM Mono', monospace;
+    color: var(--muted);
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* The Machine */
+  .machine {
+    width: 100%;
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 20px;
+    padding: 2.5rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .machine::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--yellow), var(--cyan), var(--green), var(--accent));
+    background-size: 200% 100%;
+    animation: gradient-slide 4s linear infinite;
+  }
+
+  @keyframes gradient-slide {
+    0% { background-position: 0% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  /* Status bar */
+  .status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    font-size: 0.7rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+
+  .status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    display: inline-block;
+    margin-right: 6px;
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  /* Slot display */
+  .slot-window {
+    background: var(--slot-bg);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem 1.5rem;
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+  }
+
+  .slot-window::before,
+  .slot-window::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 40px;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .slot-window::before {
+    top: 0;
+    background: linear-gradient(to bottom, var(--slot-bg), transparent);
+  }
+
+  .slot-window::after {
+    bottom: 0;
+    background: linear-gradient(to top, var(--slot-bg), transparent);
+  }
+
+  .idea-category {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--cyan);
+    margin-bottom: 0.8rem;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.4s ease 0.2s;
+  }
+
+  .idea-category.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .idea-text {
+    font-family: 'Anybody', sans-serif;
+    font-weight: 900;
+    font-size: clamp(1.4rem, 4.5vw, 2.2rem);
+    line-height: 1.15;
+    color: var(--text);
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s;
+  }
+
+  .idea-text.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  .idea-flavor {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-top: 0.8rem;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.4s ease 0.35s;
+    font-style: italic;
+  }
+
+  .idea-flavor.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Spinning state */
+  .slot-window.spinning .idea-text {
+    animation: slot-spin 0.08s linear infinite;
+    opacity: 0.3;
+    filter: blur(2px);
+    transition: none;
+  }
+
+  @keyframes slot-spin {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100%); }
+  }
+
+  /* The Button */
+  .pull-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .pull-btn {
+    font-family: 'Dela Gothic One', sans-serif;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--bg);
+    background: var(--accent);
+    border: none;
+    border-radius: 14px;
+    padding: 1rem 3rem;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.15s ease;
+    box-shadow:
+      0 4px 0 #b8213a,
+      0 6px 20px var(--accent-glow);
+  }
+
+  .pull-btn:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      0 6px 0 #b8213a,
+      0 10px 30px var(--accent-glow);
+  }
+
+  .pull-btn:active {
+    transform: translateY(3px);
+    box-shadow:
+      0 1px 0 #b8213a,
+      0 2px 10px var(--accent-glow);
+  }
+
+  .pull-btn.spinning {
+    pointer-events: none;
+    background: var(--muted);
+    box-shadow: 0 4px 0 #444, 0 6px 20px rgba(0,0,0,0.3);
+  }
+
+  .shortcut-hint {
+    font-size: 0.65rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+  }
+
+  .shortcut-hint kbd {
+    display: inline-block;
+    background: var(--border);
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    margin: 0 2px;
+  }
+
+  /* Counter */
+  .counter {
+    font-size: 0.7rem;
+    color: var(--muted);
+    text-align: center;
+    margin-top: 0.5rem;
+    letter-spacing: 0.1em;
+  }
+
+  .counter span {
+    color: var(--yellow);
+    font-weight: 500;
+  }
+
+  /* History trail */
+  .history {
+    width: 100%;
+    margin-top: 1rem;
+  }
+
+  .history-label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    margin-bottom: 0.6rem;
+  }
+
+  .history-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .history-chip {
+    font-size: 0.7rem;
+    background: var(--border);
+    color: var(--muted);
+    padding: 4px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+    animation: chip-in 0.3s ease backwards;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .history-chip:hover {
+    background: var(--accent);
+    color: var(--bg);
+  }
+
+  @keyframes chip-in {
+    from { opacity: 0; transform: scale(0.8); }
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 2rem 0 3rem;
+    color: var(--muted);
+    font-size: 0.7rem;
+    line-height: 1.8;
+  }
+
+  .footer a {
+    color: var(--cyan);
+    text-decoration: none;
+  }
+
+  /* Confetti burst on good ones */
+  .confetti-piece {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    pointer-events: none;
+    z-index: 1000;
+    animation: confetti-fall 1.5s ease-out forwards;
+  }
+
+  @keyframes confetti-fall {
+    0% { opacity: 1; transform: translateY(0) rotate(0deg) scale(1); }
+    100% { opacity: 0; transform: translateY(100vh) rotate(720deg) scale(0.5); }
+  }
+
+  /* Glow pulse on reveal */
+  .slot-window.reveal-glow {
+    box-shadow: 0 0 40px var(--accent-glow), inset 0 0 40px rgba(255,61,90,0.05);
+    transition: box-shadow 0.3s ease;
+  }
+
+  /* Mobile tweaks */
+  @media (max-width: 540px) {
+    .container { padding: 1rem; }
+    .machine { padding: 1.5rem 1rem; border-radius: 14px; }
+    .slot-window { min-height: 150px; padding: 1.5rem 1rem; }
+    .pull-btn { padding: 0.9rem 2rem; font-size: 1rem; }
+    .header { padding-top: 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header class="header">
+    <h1>What should <span class="highlight">Alex</span> make a website about?</h1>
+    <p class="subtitle">As if he needs another project he won't finish.</p>
+  </header>
+
+  <div class="machine">
+    <div class="status-bar">
+      <span><span class="status-dot"></span> Idea engine online</span>
+      <span id="idea-count">ideas loaded</span>
+    </div>
+
+    <div class="slot-window" id="slot">
+      <div class="idea-category" id="category">Ready?</div>
+      <div class="idea-text" id="idea">Hit the button, Alex.</div>
+      <div class="idea-flavor" id="flavor">You know you're going to start this and abandon it in 3 days.</div>
+    </div>
+
+    <div class="pull-section">
+      <button class="pull-btn" id="pullBtn" onclick="spin()">Give me an idea</button>
+      <div class="shortcut-hint">or press <kbd>Space</kbd> (you love a shortcut)</div>
+    </div>
+
+    <div class="counter" id="counter"></div>
+
+    <div class="history" id="history" style="display:none;">
+      <div class="history-label">Ideas you'll screenshot and never act on</div>
+      <div class="history-items" id="historyItems"></div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    You're going to build this in one sitting using Claude Code<br>
+    and then never look at it again. And that's beautiful.
+  </footer>
+</div>
+
+<script>
+const IDEAS = [
+  // Project Graveyard - his inability to finish things
+  { text: "A memorial wall for every project you started and abandoned", category: "graveyard", flavor: "It would take longer to build than any of the projects lasted." },
+  { text: "A live counter of untracked files in your home directory", category: "graveyard", flavor: "Last count: 400+. Each one had a vision." },
+  { text: "A dating app but for your abandoned side projects looking for a new owner", category: "graveyard", flavor: "'Promising social dashboard seeks someone who'll actually deploy me.'" },
+  { text: "A site that calculates the average lifespan of your projects in days", category: "graveyard", flavor: "Most don't make it past the weekend." },
+  { text: "An interactive graveyard where each tombstone is a repo you haven't touched in 6 months", category: "graveyard", flavor: "RIP daily-oracle. You were beautiful for 48 hours." },
+  { text: "A burndown chart but it tracks how fast your enthusiasm dies after starting something", category: "graveyard", flavor: "Day 1: THIS CHANGES EVERYTHING. Day 4: what was I building again?" },
+  { text: "A website that just lists every Python script in your Dev folder", category: "graveyard", flavor: "Over 100 scripts. Maybe 3 still run." },
+  { text: "A progress bar that shows what percentage of your ideas ever see a second commit", category: "graveyard", flavor: "The bar is not going to be very full, Alex." },
+  { text: "A website that randomly resurfaces one of your old abandoned projects and guilt-trips you about it", category: "graveyard", flavor: "'Remember me? You were so excited. You said I was the one.'" },
+  { text: "A 'Where Are They Now?' for every tool you built yourself and then stopped using", category: "graveyard", flavor: "The morning sweep script misses you." },
+  { text: "A site that shows how many folders deep your organizational system goes before it gives up", category: "graveyard", flavor: "HQ-Clean > Dev > chief-of-staff-sessions > swarm-plans-v2 > ..." },
+  { text: "A public apology to every newsletter subscriber who signed up for something that stopped after 3 issues", category: "graveyard", flavor: "You meant it at the time. You really did." },
+
+  // Claude Codependency - his relationship with AI
+  { text: "A relationship timeline between you and Claude, with milestones", category: "codependency", flavor: "First prompt. First skill. First time you said 'remember this.'" },
+  { text: "A website that tracks how many hours you've spent talking to Claude vs. actual humans", category: "codependency", flavor: "The ratio is concerning and you know it." },
+  { text: "A love language quiz but it's about your coding setup", category: "codependency", flavor: "Your love language is 'acts of auto-accept mode.'" },
+  { text: "A site that counts how many custom skills you've built instead of just... doing the thing", category: "codependency", flavor: "You have a skill for making skills. Think about that." },
+  { text: "A dramatic reading of your CLAUDE.md, performed as a monologue", category: "codependency", flavor: "It's 200+ lines. It has emotional notes about your clients. It's basically a diary." },
+  { text: "A website where Claude reviews working with you", category: "codependency", flavor: "'3 stars. Starts strong. Gets distracted. Occasionally brilliant. Forgets to commit.'" },
+  { text: "A visualization of every slash command you've created, connected by how often you actually use them", category: "codependency", flavor: "Most of the lines go nowhere." },
+  { text: "A site that generates conversations between your 50+ custom agents as if they were coworkers", category: "codependency", flavor: "'Has anyone seen the vibe coach? He hasn't clocked in since January.'" },
+  { text: "A dashboard showing the ratio of time you spend configuring Claude vs. producing output", category: "codependency", flavor: "The configuration IS the output. You've become a meta-worker." },
+  { text: "A support group website for people whose CLAUDE.md is longer than their actual code", category: "codependency", flavor: "Step 1: Admit the system prompt is doing all the work." },
+  { text: "A site that just prints your .claude folder structure like a family tree", category: "codependency", flavor: "Skills, agents, commands, hooks, references, learnings, projects, memory... it's a civilization." },
+  { text: "A website that tells you what you could have built in the time you spent organizing your Claude setup", category: "codependency", flavor: "At least two functioning products. Maybe three." },
+
+  // Vibe Coder Energy - building without understanding
+  { text: "A site where you paste code you shipped and it tells you what percentage you actually understand", category: "vibe-coder", flavor: "The number will be low and the confidence will be high." },
+  { text: "A bingo card generator for vibe coding sessions", category: "vibe-coder", flavor: "Free space: 'It works and I don't know why.'" },
+  { text: "A website that explains your own code back to you because you definitely don't remember writing it", category: "vibe-coder", flavor: "You didn't write it. Claude did. But it's in your repo so..." },
+  { text: "A trophy case for things you shipped without understanding a single line", category: "vibe-coder", flavor: "Hall of fame: the Remotion video pipeline. Zero idea how it works. Perfect output." },
+  { text: "A confidence meter that goes up every time you deploy something you can't debug", category: "vibe-coder", flavor: "If it breaks, you'll just ask Claude to fix it. Circle of life." },
+  { text: "A site that pairs your actual technical knowledge with a job title", category: "vibe-coder", flavor: "Knows what a div is: Senior Vibe Architect." },
+  { text: "A website that shows a split screen of what you typed vs. what Claude actually built", category: "vibe-coder", flavor: "Left: 'make it cool.' Right: 400 lines of production code." },
+  { text: "A certification program for vibe coding, issued on the honor system", category: "vibe-coder", flavor: "Requirements: ship 3 things, understand 0 of them, still collect the check." },
+  { text: "A glossary of programming terms you use confidently but couldn't define under oath", category: "vibe-coder", flavor: "'Webhook.' You say it all the time. What is it, Alex? WHAT IS IT.'" },
+  { text: "A website that auto-generates a technical blog post from your Claude conversations", category: "vibe-coder", flavor: "'How I built a full-stack app in 20 minutes' (by saying 'yeah do that' 47 times)." },
+
+  // Content Creator Brain - social media / newsletter habits
+  { text: "A live dashboard of how many platforms you're cross-posting to right now", category: "content-brain", flavor: "X, LinkedIn, Substack, blog, newsletter, cohort site... did you miss one?" },
+  { text: "A website that tracks how many 'content systems' you've built vs. content you've actually posted", category: "content-brain", flavor: "Systems: 12. Posts this month: still thinking about it." },
+  { text: "A site that generates LinkedIn posts in your voice and then roasts them", category: "content-brain", flavor: "'I asked my AI to write this post about AI writing posts. Anyway, here's what I learned.'" },
+  { text: "A visual timeline of every 'authority engine' and 'content strategy' doc you've written", category: "content-brain", flavor: "Each one was THE framework. Until the next one was THE framework." },
+  { text: "A website that counts how many newsletters you've subscribed to vs. how many you actually read", category: "content-brain", flavor: "The inbox is a graveyard of good intentions." },
+  { text: "A public changelog of every time you redesigned your personal brand this year", category: "content-brain", flavor: "v7.3. Still not quite right. v7.4 will be the one." },
+  { text: "A site that maps out every 'repurposing pipeline' you've designed", category: "content-brain", flavor: "Podcast to clips to threads to newsletter to blog to... where does it end?" },
+  { text: "A website that shows the gap between your content calendar and reality", category: "content-brain", flavor: "Calendar: 4 posts/week. Reality: one thread on Thursday, maybe." },
+  { text: "A tool that calculates your ratio of thinking about posting vs. actually posting", category: "content-brain", flavor: "Thinking: 95%. Posting: 5%. But the thinking was REALLY productive." },
+  { text: "A site that archives every social media strategy pivot you've made", category: "content-brain", flavor: "January: all-in on X. February: actually LinkedIn is the play. March: what about TikTok?" },
+
+  // The Naming Problem - dramatic names for simple things
+  { text: "A museum of the most dramatic names you've given to simple scripts", category: "naming", flavor: "'The Authority Engine' is a markdown file, Alex." },
+  { text: "A name generator that creates Alex-style project names for mundane tasks", category: "naming", flavor: "Grocery list? No. 'The Provision Protocol.' Taking out trash? 'Operation Void Clearing.'" },
+  { text: "A site where people submit boring tools and you rename them to sound like sci-fi movies", category: "naming", flavor: "'Drawbridge' is a diagram tool. 'Antigravity' is a folder. These are just... things." },
+  { text: "A Hall of Fame for your most unhinged folder names", category: "naming", flavor: "void-screaming. ego-death. antigravity. streak-fire. You okay, man?" },
+  { text: "A dramatic trailer generator for your Python scripts", category: "naming", flavor: "In a world where emails go unread... one man built... morning_sweep.py." },
+  { text: "A website that pairs your project names with what they actually do", category: "naming", flavor: "'Drawbridge' = makes rectangles. 'Existential Kink' = a chatbot. The drama is the product." },
+  { text: "A random name generator trained exclusively on your existing project names", category: "naming", flavor: "Output: 'The Obsidian Reckoning.' What does it do? Doesn't matter. Ship it." },
+  { text: "A website that reveals the dramatic origin story behind each of your tools", category: "naming", flavor: "'I was lying in bed at 2am when it hit me: what if checking email... had a SKILL.'" },
+
+  // Self-Awareness - knowing all of this and doing it anyway
+  { text: "A website that's just a mirror and it says 'you're going to build a system for this instead of doing it'", category: "self-aware", flavor: "The most useful tool you'll never use." },
+  { text: "A site that predicts which of today's ideas will become tomorrow's abandoned repos", category: "self-aware", flavor: "Spoiler: all of them. But you'll have fun tonight." },
+  { text: "A website idea generator that generates website ideas", category: "self-aware", flavor: "Wait." },
+  { text: "A tool that measures the gap between 'I should simplify' and what you actually do", category: "self-aware", flavor: "You say you want simple. You build empires. Every time." },
+  { text: "A retrospective on every time you said 'this is the last system I'll build'", category: "self-aware", flavor: "You've said it 11 times. Each time you meant it." },
+  { text: "A website that just displays your home directory file count in real-time", category: "self-aware", flavor: "Watching the number go up is its own kind of art." },
+  { text: "A confessional booth website where builders admit how many projects they're running simultaneously", category: "self-aware", flavor: "Your count is in the double digits and some of them have sub-projects." },
+  { text: "A site that auto-generates a honest bio based on your actual computer activity", category: "self-aware", flavor: "'Alex Dobrenko: professional Claude prompter, amateur everything else.'" },
+  { text: "A website that calculates your organizational overhead as a percentage of your productive output", category: "self-aware", flavor: "If organizing was a sport, you'd be in the Olympics." },
+  { text: "A personality quiz that always returns 'you're going to build a system for this'", category: "self-aware", flavor: "Every answer. Every path. Same result." },
+  { text: "A 12-step program website for people addicted to making new slash commands", category: "self-aware", flavor: "Step 1: Admit you have 50+ skills. Step 2: Make a skill for the 12-step program." },
+
+  // Actually Good Ideas (that he'd start and abandon)
+  { text: "A course teaching comedy writers to use AI tools, built from actual experience", category: "actually-good", flavor: "Oh wait, you're already doing this one. Carry on." },
+  { text: "A one-page site that explains vibe coding to skeptical developers", category: "actually-good", flavor: "With a live demo where you ship something while they read." },
+  { text: "A gallery of the best things non-engineers have built with AI coding tools", category: "actually-good", flavor: "Before and after: 'I don't code' to 'I shipped this.'" },
+  { text: "A website that teaches people to write good AI prompts, using comedy writing principles", category: "actually-good", flavor: "Setup, specificity, surprise. Works for both jokes and prompts." },
+  { text: "A weekly showcase of weird websites built by your Code for Creatives students", category: "actually-good", flavor: "This one would actually be great. You'll build the CMS and never populate it." },
+  { text: "A site documenting what happens when a comedy writer gets unrestricted AI access for a year", category: "actually-good", flavor: "The blog writes itself. Which is kind of the point." },
+  { text: "A portfolio of everything you built in a single terminal", category: "actually-good", flavor: "The most honest portfolio a vibe coder could have." },
+  { text: "A website that's just your net worth page but it updates based on your actual freelance invoices", category: "actually-good", flavor: "You already bought the domain. alexdobrenkonetworth.com is RIGHT THERE." },
+  { text: "An interactive essay about the creative process of someone who can't write code but ships code", category: "actually-good", flavor: "It's a genuinely interesting story. Tell it before everyone else does." },
+  { text: "A curated directory of AI tools, but only the ones you've actually used and liked", category: "actually-good", flavor: "Not a listicle. A testimony. Huge difference." },
+
+  // The Meta Layer - systems for systems
+  { text: "A system for tracking all your systems", category: "meta", flavor: "You already have this. It's called CLAUDE.md. And it has reference files that have reference files." },
+  { text: "A website that visualizes your entire Claude skill ecosystem as a solar system", category: "meta", flavor: "50+ skills orbiting the void of productivity." },
+  { text: "A dashboard for your dashboards", category: "meta", flavor: "You have a social dashboard, a focus dashboard, a chief of staff inbox, and a morning sweep. They need a dashboard." },
+  { text: "An organizational chart for your AI agents as if they were employees", category: "meta", flavor: "The vibe coach reports to the chief of staff who reports to... you, lying on the couch." },
+  { text: "A site that maps dependencies between your various 'reference files'", category: "meta", flavor: "CLAUDE.md references 15 files. Some of those reference others. It's a web." },
+  { text: "A meta-retrospective on every retrospective system you've built", category: "meta", flavor: "You have learnings.md, MEMORY.md, a scratch pad, and session capture. Do they talk to each other? No." },
+  { text: "A website that shows the complete graph of every file that mentions another file in your setup", category: "meta", flavor: "It's going to look like a conspiracy board and you're going to love it." },
+  { text: "A Rube Goldberg machine simulator but it's your content pipeline", category: "meta", flavor: "Podcast to Granola to transcript to Claude to blog to Hugo to Netlify to... where was I?" },
+  { text: "A changelog for your CLAUDE.md as if it were a product", category: "meta", flavor: "v47.2: Added emotional notes about client. v47.3: Added a system for logging mistakes about the system." },
+  { text: "A website that counts how many layers of abstraction exist between you and actually making something", category: "meta", flavor: "You > Claude > Skill > Agent > Sub-agent > Tool > Output. Six layers, baby." },
+
+  // Procrastination Classics
+  { text: "A website that congratulates you for generating ideas instead of executing the last 50", category: "procrastination", flavor: "You're so good at step one." },
+  { text: "A Pomodoro timer but every time it goes off it suggests a new project instead", category: "procrastination", flavor: "Designed for how you actually work." },
+  { text: "A site where you can write a passionate README for a project that doesn't exist yet", category: "procrastination", flavor: "The README is the product. The code is optional." },
+  { text: "A website that just says 'go finish something' in increasingly aggressive fonts", category: "procrastination", flavor: "First visit: friendly suggestion. Tenth visit: the font is screaming." },
+  { text: "A kanban board where every card eventually auto-moves to 'Abandoned'", category: "procrastination", flavor: "Built for realism, not optimism." },
+  { text: "A site that plays the sound of a disappointed parent whenever you start a new project", category: "procrastination", flavor: "'Another one? What happened to the last one?'" },
+  { text: "A commitment device website where you put money on finishing something", category: "procrastination", flavor: "You'd build the website. And then not finish the thing you bet on." },
+  { text: "A browser extension that blocks you from buying new domains until you ship on an existing one", category: "procrastination", flavor: "alexdobrenkonetworth.com is still a one-page placeholder and you know it." },
+];
+
+const CATEGORY_LABELS = {
+  'graveyard': 'Project Graveyard',
+  'codependency': 'Claude Codependency',
+  'vibe-coder': 'Vibe Coder Energy',
+  'content-brain': 'Content Creator Brain',
+  'naming': 'The Naming Problem',
+  'self-aware': 'Painfully Self-Aware',
+  'actually-good': 'Actually Good (You Won\'t Finish It)',
+  'meta': 'Systems for Systems',
+  'procrastination': 'Procrastination as Art'
+};
+
+const CATEGORY_COLORS = {
+  'graveyard': '#ff3d5a',
+  'codependency': '#e040fb',
+  'vibe-coder': '#00e5ff',
+  'content-brain': '#ffd23f',
+  'naming': '#ff9f1c',
+  'self-aware': '#39ff14',
+  'actually-good': '#8b8bff',
+  'meta': '#ff6b35',
+  'procrastination': '#ff4081'
+};
+
+let spinCount = 0;
+let history = [];
+let isSpinning = false;
+let usedIndices = new Set();
+
+function getRandomIdea() {
+  // Reset if we've used most ideas
+  if (usedIndices.size >= IDEAS.length - 1) {
+    usedIndices.clear();
+  }
+
+  let idx;
+  do {
+    idx = Math.floor(Math.random() * IDEAS.length);
+  } while (usedIndices.has(idx));
+
+  usedIndices.add(idx);
+  return IDEAS[idx];
+}
+
+function spin() {
+  if (isSpinning) return;
+  isSpinning = true;
+
+  const btn = document.getElementById('pullBtn');
+  const slot = document.getElementById('slot');
+  const categoryEl = document.getElementById('category');
+  const ideaEl = document.getElementById('idea');
+  const flavorEl = document.getElementById('flavor');
+
+  btn.classList.add('spinning');
+  btn.textContent = 'Spinning...';
+  slot.classList.add('spinning');
+  slot.classList.remove('reveal-glow');
+
+  // Remove visible classes
+  categoryEl.classList.remove('visible');
+  ideaEl.classList.remove('visible');
+  flavorEl.classList.remove('visible');
+
+  // Flash random ideas during spin
+  const flashInterval = setInterval(() => {
+    const flashIdea = IDEAS[Math.floor(Math.random() * IDEAS.length)];
+    ideaEl.textContent = flashIdea.text;
+  }, 60);
+
+  // Spin duration
+  const spinTime = 600 + Math.random() * 400;
+
+  setTimeout(() => {
+    clearInterval(flashInterval);
+
+    const idea = getRandomIdea();
+    const color = CATEGORY_COLORS[idea.category] || '#00e5ff';
+
+    categoryEl.textContent = CATEGORY_LABELS[idea.category] || idea.category;
+    categoryEl.style.color = color;
+    ideaEl.textContent = idea.text;
+    flavorEl.textContent = idea.flavor;
+
+    slot.classList.remove('spinning');
+    slot.classList.add('reveal-glow');
+
+    // Stagger reveals
+    requestAnimationFrame(() => {
+      categoryEl.classList.add('visible');
+      ideaEl.classList.add('visible');
+      flavorEl.classList.add('visible');
+    });
+
+    // Update counter
+    spinCount++;
+    document.getElementById('counter').textContent = `Pull #${spinCount}`;
+
+    // Add to history
+    addToHistory(idea.text);
+
+    // Button reset
+    btn.classList.remove('spinning');
+    btn.textContent = spinCount === 0 ? 'Give me an idea' : 'Another one';
+
+    // Confetti on every 5th pull
+    if (spinCount % 5 === 0) {
+      confettiBurst();
+    }
+
+    isSpinning = false;
+  }, spinTime);
+}
+
+function addToHistory(text) {
+  // Truncate for chip display
+  const short = text.length > 40 ? text.substring(0, 37) + '...' : text;
+  history.unshift(short);
+  if (history.length > 8) history.pop();
+
+  const container = document.getElementById('history');
+  const items = document.getElementById('historyItems');
+
+  if (history.length > 1) {
+    container.style.display = 'block';
+    // Only show previous ones (skip first which is current)
+    items.innerHTML = history.slice(1).map(h =>
+      `<span class="history-chip">${h}</span>`
+    ).join('');
+  }
+}
+
+function confettiBurst() {
+  const colors = [
+    'var(--accent)', 'var(--yellow)', 'var(--cyan)', 'var(--green)', '#e040fb', '#ff9f1c'
+  ];
+  const resolvedColors = ['#ff3d5a', '#ffd23f', '#00e5ff', '#39ff14', '#e040fb', '#ff9f1c'];
+
+  for (let i = 0; i < 30; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.left = (30 + Math.random() * 40) + 'vw';
+    piece.style.top = (20 + Math.random() * 10) + 'vh';
+    piece.style.background = resolvedColors[Math.floor(Math.random() * resolvedColors.length)];
+    piece.style.animationDelay = (Math.random() * 0.3) + 's';
+    piece.style.animationDuration = (1 + Math.random() * 1) + 's';
+    piece.style.width = (4 + Math.random() * 8) + 'px';
+    piece.style.height = (4 + Math.random() * 8) + 'px';
+    piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    document.body.appendChild(piece);
+
+    setTimeout(() => piece.remove(), 2000);
+  }
+}
+
+// Spacebar trigger
+document.addEventListener('keydown', (e) => {
+  if (e.code === 'Space' && e.target === document.body) {
+    e.preventDefault();
+    spin();
+  }
+});
+
+// Show initial state
+document.addEventListener('DOMContentLoaded', () => {
+  const categoryEl = document.getElementById('category');
+  const ideaEl = document.getElementById('idea');
+  const flavorEl = document.getElementById('flavor');
+
+  setTimeout(() => {
+    categoryEl.classList.add('visible');
+    ideaEl.classList.add('visible');
+    flavorEl.classList.add('visible');
+  }, 300);
+
+  document.getElementById('idea-count').textContent = `${IDEAS.length} ideas loaded`;
+});
+</script>
+
+</body>
+</html>
