@@ -8,17 +8,17 @@
 <link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=DM+Mono:wght@400;500&family=Anybody:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0a0a0f;
-    --surface: #13131f;
-    --border: #2a2a3d;
-    --accent: #ff3d5a;
-    --accent-glow: #ff3d5a66;
-    --yellow: #ffd23f;
-    --cyan: #00e5ff;
-    --green: #39ff14;
-    --text: #e8e8f0;
-    --muted: #6b6b82;
-    --slot-bg: #08080d;
+    --bg: #f5f0e8;
+    --surface: #fffdf7;
+    --border: #d4cbb8;
+    --accent: #d9342b;
+    --accent-glow: #d9342b33;
+    --yellow: #e8a817;
+    --cyan: #1a6b5a;
+    --green: #2d7a3a;
+    --text: #1a1a1a;
+    --muted: #8a8070;
+    --slot-bg: #f0ebe0;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -40,7 +40,7 @@
     content: '';
     position: fixed;
     inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
     pointer-events: none;
     z-index: 999;
   }
@@ -54,8 +54,8 @@
       0deg,
       transparent,
       transparent 2px,
-      rgba(0,0,0,0.08) 2px,
-      rgba(0,0,0,0.08) 4px
+      rgba(0,0,0,0.02) 2px,
+      rgba(0,0,0,0.02) 4px
     );
     pointer-events: none;
     z-index: 998;
@@ -124,6 +124,7 @@
     padding: 2.5rem 2rem;
     position: relative;
     overflow: hidden;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.06);
   }
 
   .machine::before {
@@ -136,6 +137,7 @@
     background: linear-gradient(90deg, var(--accent), var(--yellow), var(--cyan), var(--green), var(--accent));
     background-size: 200% 100%;
     animation: gradient-slide 4s linear infinite;
+    border-radius: 20px 20px 0 0;
   }
 
   @keyframes gradient-slide {
@@ -200,12 +202,12 @@
 
   .slot-window::before {
     top: 0;
-    background: linear-gradient(to bottom, var(--slot-bg), transparent);
+    background: linear-gradient(to bottom, var(--slot-bg) 10%, transparent);
   }
 
   .slot-window::after {
     bottom: 0;
-    background: linear-gradient(to top, var(--slot-bg), transparent);
+    background: linear-gradient(to top, var(--slot-bg) 10%, transparent);
   }
 
   .idea-category {
@@ -282,7 +284,7 @@
     font-size: 1.1rem;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: var(--bg);
+    color: #fffdf7;
     background: var(--accent);
     border: none;
     border-radius: 14px;
@@ -291,28 +293,29 @@
     position: relative;
     transition: all 0.15s ease;
     box-shadow:
-      0 4px 0 #b8213a,
+      0 4px 0 #9b1e18,
       0 6px 20px var(--accent-glow);
   }
 
   .pull-btn:hover {
     transform: translateY(-2px);
     box-shadow:
-      0 6px 0 #b8213a,
+      0 6px 0 #9b1e18,
       0 10px 30px var(--accent-glow);
   }
 
   .pull-btn:active {
     transform: translateY(3px);
     box-shadow:
-      0 1px 0 #b8213a,
+      0 1px 0 #9b1e18,
       0 2px 10px var(--accent-glow);
   }
 
   .pull-btn.spinning {
     pointer-events: none;
-    background: var(--muted);
-    box-shadow: 0 4px 0 #444, 0 6px 20px rgba(0,0,0,0.3);
+    background: var(--border);
+    color: var(--muted);
+    box-shadow: 0 4px 0 #b0a898, 0 6px 20px rgba(0,0,0,0.1);
   }
 
   .shortcut-hint {
@@ -419,8 +422,9 @@
 
   /* Glow pulse on reveal */
   .slot-window.reveal-glow {
-    box-shadow: 0 0 40px var(--accent-glow), inset 0 0 40px rgba(255,61,90,0.05);
-    transition: box-shadow 0.3s ease;
+    box-shadow: 0 0 30px var(--accent-glow), inset 0 0 30px rgba(217,52,43,0.04);
+    border-color: var(--accent);
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
   }
 
   /* Mobile tweaks */
@@ -597,15 +601,15 @@ const CATEGORY_LABELS = {
 };
 
 const CATEGORY_COLORS = {
-  'graveyard': '#ff3d5a',
-  'codependency': '#e040fb',
-  'vibe-coder': '#00e5ff',
-  'content-brain': '#ffd23f',
-  'naming': '#ff9f1c',
-  'self-aware': '#39ff14',
-  'actually-good': '#8b8bff',
-  'meta': '#ff6b35',
-  'procrastination': '#ff4081'
+  'graveyard': '#d9342b',
+  'codependency': '#8b3aa0',
+  'vibe-coder': '#1a6b5a',
+  'content-brain': '#b87d10',
+  'naming': '#c45d1a',
+  'self-aware': '#2d7a3a',
+  'actually-good': '#4a5aad',
+  'meta': '#a0522d',
+  'procrastination': '#b82550'
 };
 
 let spinCount = 0;
@@ -720,7 +724,7 @@ function confettiBurst() {
   const colors = [
     'var(--accent)', 'var(--yellow)', 'var(--cyan)', 'var(--green)', '#e040fb', '#ff9f1c'
   ];
-  const resolvedColors = ['#ff3d5a', '#ffd23f', '#00e5ff', '#39ff14', '#e040fb', '#ff9f1c'];
+  const resolvedColors = ['#d9342b', '#e8a817', '#1a6b5a', '#2d7a3a', '#8b3aa0', '#c45d1a'];
 
   for (let i = 0; i < 30; i++) {
     const piece = document.createElement('div');
